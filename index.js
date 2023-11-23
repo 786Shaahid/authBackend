@@ -50,14 +50,14 @@ app.use(cors({
 
 
 //defalut respone and req
-app.get('/',authJWT,(req,res)=>{
+app.get('/',(req,res)=>{
     return res.send(" Hii shahid tujhe bahut bara admi banana hai");
 });
 
  
 app.listen(port,(err)=>{
     if(err){
-        console.log("Server is not connecting on port :"+port);
+        console.log("Server is not connecting on port :",port);
     }
     console.log(`Sever is successfully connected on port: ${port}`);
 })

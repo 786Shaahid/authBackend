@@ -50,9 +50,9 @@ app.use(cors({
 
 
 //defalut respone and req
-app.get('/',(req,res)=>{
-    return res.send(" Hii shahid tujhe bahut bara admi banana hai");
-});
+// app.get('/',(req,res)=>{
+//     return res.send(" Hii shahid tujhe bahut bara admi banana hai");
+// });
 
  
 app.listen(port,(err)=>{

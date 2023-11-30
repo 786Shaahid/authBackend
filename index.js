@@ -43,10 +43,16 @@ app.use(passport.session());
 // import user routers
 app.use("/api/users",userRouter);
 
-app.use(cors({
-    origin:"http://192.168.43.177:3000",
-    allowedHeaders:"*"
-}));
+const corsConfig=
+    {
+        // origin:"https://incredible-twilight-3ebe40.netlify.app/",
+        origin:"http://localhost:3000",
+        allowedHeaders:"*",
+        credentials:true,
+        optionsSuccessStatus:200
+    }
+
+app.use(cors());
 
 
 //defalut respone and req

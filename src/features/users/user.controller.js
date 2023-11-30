@@ -10,8 +10,7 @@ export default class UserController {
   async signUp(req, res) {
     try {
       const user = await this.userRepository.userSingUp(req.body);
-      const saveUser = await user.save();
-      return res.status(201).send(saveUser);
+      return res.status(201).send(user);
     } catch (err) {
       console.log(err.message);
       return res.status(400).send(err.message);

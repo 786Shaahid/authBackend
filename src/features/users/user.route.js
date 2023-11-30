@@ -50,7 +50,6 @@ userRouter.get("/getdata",(req,res)=>{
     "name":"shahid",
     "passport":"raza",
     "phone":"9090090"
-
   }
   return res.status(200).send(data);
 })

@@ -4,16 +4,17 @@ export default class UserRepository{
       
       async userSingUp(user){
         const {name,email,password}=user;
+         console.log(name,email,password);
         try{
           // hashing password
-          const salt= 12;
+          const salt= await bcrypt.genSalt(12);
           const hashPassword=await bcrypt.hash(password,salt);
           const userDetails= await userModel({
             name:name,
             email:email,
             password:hashPassword
           });
-          return  userDetails;
+          return await userDetails.save();
         }catch(err){
           console.log(err);
         }

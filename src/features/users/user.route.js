@@ -33,7 +33,7 @@ userRouter.get(
   "/auth/google/callback",
   passport.authenticate("google", { session: false }),
   (req, res) => {
-    res.send("google authentication complete go for log in");
+    res.send("google authentication complete");
   }
 );
 

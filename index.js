@@ -12,8 +12,8 @@ import cors from 'cors';
 // authentication configs
 import { googleAuth } from './src/configures/googleOauth.config.js';
 import {facebookAuth} from "./src/configures/facebookOauth.config.js";
-facebookAuth();
 googleAuth();
+facebookAuth();
 // create server
 const app=express();
 const port =8080;
@@ -22,26 +22,26 @@ mongooseConnection();
 
 // CORS policy configure
 // app.use(cors({
-//     origin:"http://192.168.43.177:3000",
-//     allowedHeaders:"*"
-// }))
-
-app.use(express.json({extended:true}));
-// session middleware
-app.use(session({
-    secret:"SECRETE",
-    resave:false,
-    saveUninitialized:true,
-    cookie:{
-        maxAge:60*60,
-    }
-}));
-// setup the passport
-app.use(passport.initialize());
-app.use(passport.session());
-
-// import user routers
-app.use("/api/users",userRouter);
+    //     origin:"http://192.168.43.177:3000",
+    //     allowedHeaders:"*"
+    // }))
+    
+    app.use(express.json({extended:true}));
+    // session middleware
+    app.use(session({
+        secret:"SECRETE",
+        resave:false,
+        saveUninitialized:true,
+        cookie:{
+            maxAge:60*60,
+        }
+    }));
+    // setup the passport
+    app.use(passport.initialize());
+    app.use(passport.session());
+    
+    // import user routers
+    app.use("/api/users",userRouter);
 
 const corsConfig=
     {

@@ -22,13 +22,14 @@ export const sendMailForOTP=async (email,otp)=>{
     // }
      // 2. send mail
      try{
-         await transport.sendMail({
+       const mailsss=   await transport.sendMail({
                 from:process.env.GMAIL_ACCOUNT,
                 to:email,
                 subject:"OTP for login",
                 text:`hii, Your OTP is ${otp} for login.`
          })
-     }catch(err){
+        return mailsss;
+        }catch(err){
         console.log("err",err);
      }
 

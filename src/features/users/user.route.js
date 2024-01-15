@@ -3,11 +3,12 @@ import UserController from "./user.controller.js";
 import { authJWT } from "../../middlewares/authJWT.middleware.js";
 import { googleAuth } from "../../configures/googleOauth.config.js";
 import passport from "passport";
+import { validateUser } from "../../middlewares/userValidate.middlewares.js";
 const userRouter = express.Router();
 const userController = new UserController();
 
 
-userRouter.post("/signup", (req, res) => {
+userRouter.post("/signup",validateUser, (req, res) => {
   userController.signUp(req, res);
 });
 userRouter.post("/signin", (req, res) => {
@@ -44,14 +45,21 @@ userRouter.get('/auth/facebook',passport.authenticate("facebook",{
 ))
  userRouter.get("/auth/facebook/callback",passport.authenticate("facebook",{session:false}),(req,res)=>{
     res.send("loged in with facebook successfully")
- })
-userRouter.get("/getdata",(req,res)=>{
-  const data={
-    "name":"shahid",
-    "passport":"raza",
-    "phone":"9090090"
-  }
-  return res.status(200).send(data);
-})
+ });  
+// userRouter.get("/getdata",(req,res)=>{
+//   const data={
+//     "name":"shahid",
+//     "passport":"raza",
+//     "phone":"9090090"
+//   }
+//   return res.status(200).send(data);
+// });
+
+userRouter.post("/getall",(req,res)=>{
+  userController.getAllUser(req,res);
+});
+// userRouter.post('/addfriend',(req,res)=>{
+//   userController.addFriend(req,res);
+// })
  
 export default userRouter;

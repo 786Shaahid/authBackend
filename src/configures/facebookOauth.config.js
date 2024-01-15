@@ -22,7 +22,7 @@ export const facebookAuth=()=>{
       });
       passport.deserializeUser((user, cb) => {
         process.nextTick(() => {
-          return cb(null, use);
+          return cb(null, user);
         });
       });
 }

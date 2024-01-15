@@ -1,28 +1,24 @@
 import mongoose  from "mongoose";
-
 const userSchema= new mongoose.Schema({
     name:{
         type:String,
-        required:true,
-        minlength:4,
-        maxlength:255
+        required:true
     },
     email:{
         type:String,
-        required:true,
-        unique:true,
-        minlength:8,
-        maxlength:225
+        required:true
     },
     password:{
         type:String,
-        required:true,
-        minlength:6,
+        required:true
     },
     OTP:{
         type:String,
         default:""
+    },
+    refreshToken:{
+        type:String,
     }
-});
+},{timestamps:true});
 
 export const userModel=mongoose.model("User",userSchema);

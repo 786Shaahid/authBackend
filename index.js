@@ -7,29 +7,40 @@ import { authJWT } from './src/middlewares/authJWT.middleware.js';
 import session from 'express-session';
 import passport from 'passport';
 import cors from 'cors';
-
+import { Server } from 'socket.io';
+import http from 'http'
 
 // authentication configs
 import { googleAuth } from './src/configures/googleOauth.config.js';
 import {facebookAuth} from "./src/configures/facebookOauth.config.js";
 import friendRouter from './src/features/friends/friends.route.js';
+import { chatConnection } from './src/configures/socket.config.js';
 googleAuth();
 facebookAuth();
 // create server
 const app=express();
 const port =8080;
 
+// Create an HTTP server and integrate with Socket.io
+const  server= http.createServer(app);
+export  const io= new Server(server,{
+  cors:{
+     origin:true,
+     methods: ["GET", "POST"],
+     transports: ['websocket', 'polling'],
+     credentials: true
+  },
+  // pingTimeout: 60000,
+  allowEIO3: true
+});
+
+chatConnection(io);
+
 app.use(express.json({extended:true}));
 app.use(express.urlencoded({ extended: true }));
 
 
 
-// CORS policy configure
-// app.use(cors({
-    //     origin:"http://192.168.43.177:3000",
-    //     allowedHeaders:"*"
-    // }))
-    // session middleware
     app.use(session({
         secret:"SECRETE",
         resave:false,
@@ -67,7 +78,7 @@ app.use(express.urlencoded({ extended: true }));
         // connecting mongooose
         connectDB()
         .then((connectedDb) => {
-          app.listen(port, () => {
+          server.listen(port, () => {
             console.log(`app listening on port ${port}`);
             console.log(`connected to DB :: ${connectedDb.name}`);
           });

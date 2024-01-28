@@ -21,7 +21,8 @@ userRouter.post("/singinotp", (req, res) => {
   userController.loginWithOtp(req, res);
 });
 
-userRouter.delete("/logout", authJWT, (req, res) => {
+
+userRouter.get("/logout", authJWT, (req, res) => {
   userController.logout(req, res);
 });
 
@@ -42,10 +43,13 @@ userRouter.get(
 userRouter.get('/auth/facebook',passport.authenticate("facebook",{
   scope: ['public_profile', 'email']
 }
+
+
 ))
- userRouter.get("/auth/facebook/callback",passport.authenticate("facebook",{session:false}),(req,res)=>{
-    res.send("loged in with facebook successfully")
- });  
+ userRouter.get("/auth/facebook/callback",passport.authenticate("facebook",{session:true}),(req,res)=>{
+  // console.log("req",req);
+  res.json({message:"login successfully bro"})
+});  
 // userRouter.get("/getdata",(req,res)=>{
 //   const data={
 //     "name":"shahid",

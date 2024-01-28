@@ -1,24 +1,27 @@
-// import { Socket } from "socket.io";
-// import { io } from "../..";
-
-export const chatConnection=(io)=>{
+import env from "../utility/environment.utility.js";
+export const chatConnection=(io,server)=>{
+  const port =process.env.SOCKET_PORT;
     io.on('connection', (socket) => {
-        // console.log(`User connected: ${socket.id}`);
-      
-        // Handle private messages
-        socket.on('privateMessage', ({  message }) => {
-            // const recipientSocket = io.sockets.connected[recipientSocketId];
-            console.log(message);
-        //   if (recipientSocket) {
-            // .emit('privateMessage', { senderSocketId: socket.id, message });
-        //   }
-        });
-      
-        // Handle user disconnect
-        // socket.on('disconnect', () => {
-        //   console.log(`User disconnected: ${socket.id}`);
-        // });
+      // console.log("user connected ",socket.id);
+      socket.on('joinRoom', (roomId) => {
+        socket.join(roomId);
       });
+
+      socket.on("sendMessage",({roomId,message})=>{
+        console.log("room Id",roomId);
+        console.log("message ",message);
+        io.to(roomId).emit("chat", message )
+      });
+
+      socket.on('disconnect',()=>{
+        console.log("User disconnect",socket.id);
+       })
+      });
+
+      // Socket_server listening 
+     server.listen(port,()=>{
+       console.log(`Socket server is listening on port: ${port}`);
+     })
       
 }
 

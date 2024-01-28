@@ -32,6 +32,7 @@ export default class UserController {
       const user = await this.userRepository.userSignIn(req.body);
       // console.log(user);
       if (!user) {
+        
         return res
           .status(400)
           .json(new ErrorHandle(false, "Invalid user Credential !", {}));
@@ -65,7 +66,24 @@ export default class UserController {
 
   /** 3.DEFINE  CONTROLLER FOR USER LOGOUOT */
   async logout(req, res) {
+        try {
+      const userId= req.userId;
+      const logoutUser= await this.userRepository.logout(userId);
+      if(logoutUser){
+        return res.status(200).json(
+          new ApiResponse(true, "User Logout successfully ! ", '')
+        );
+      } else{
+        return res
+        .status(404)
+        .json(new ErrorHandle(false, "Something Went Wronge !", {}));
+      }
 
+        } catch (error) {
+          return res
+        .status(err?.status || 500)
+        .json(new ErrorHandle(false, "Internal Server Error", err?.message ?? err.err ?? "something went wrong"));
+        }
   }
 
   /** 4.DEFINE  CONTROLLER FOR SENDING MAIL  */
@@ -79,14 +97,18 @@ export default class UserController {
       // send mail to registerd email id
       if (addOtpToDb) {
         const sendMail = await sendMailForOTP(addOtpToDb.email, randamPassword);
-        return res.status(200).json("Email is sent to your register email ID");
+        return res.status(200).json(
+          new ApiResponse(true, "Email is sent to your register email ID", "")
+        );
       } else {
+
         return res
-          .status(404)
-          .json("user is not registered,Please singup first !");
+          .status(err?.status || 500)
+          .json(new ErrorHandle(false, "Internal Server Error", err?.message ?? err.err ?? "something went wrong"));
+
       }
     } catch (err) {
-      console.log(err);
+      // console.log(err);
       return res
         .status(err?.status || 500)
         .json(
@@ -108,10 +130,23 @@ export default class UserController {
       if (!user) {
         return res.status(404).json("Invalid OTP");
       } else {
-        const token = await this.generateAccessToken(user._id);
+        const accessToken = await this.generateAccessToken(user._id);
+        const refreshToken = await this.generateRefreshToken(user._id);
+        //  set the refreshToken to user
+        user.refreshToken = refreshToken;
+        await user.save();
+        //  data to be   send to client side about user
+        const userData = {
+          _id: user._id,
+          name: user.name,
+        };
         return res
           .status(200)
-          .json({ token, email: user.email, name: user.name });
+          .json(new ApiResponse(true, "Login successfully !", {
+            userData,
+            accessToken,
+            refreshToken,
+          }));
       }
     } catch (err) {
       console.log(err);
@@ -135,14 +170,16 @@ export default class UserController {
     } catch (err) {
       console.log(err);
       return res
-      .status(err?.status || 500)
-      .json(
-        new ErrorHandle(
-          false,
-          "Internal Server Error !",
-          err?.message ?? err.err ?? "something went wrong"
-        )
-      );    }
+        .status(err?.status || 500)
+        .json(
+          new ErrorHandle(
+            false,
+            "Internal Server Error !",
+            err?.message ?? err.err ?? "something went wrong"
+          )
+        );
+    }
+
   }
 
   /** 7.DEFINE  CONTROLLER FOR GENERATE RANDOM PASSWORD */

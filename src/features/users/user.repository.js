@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
-import { ErrorHandle } from "../../utility/error.utility.js";
 import { userModel } from "./user.model.js";
 import bcrypt from "bcrypt";
+
 export default class UserRepository {
 
   /** 1.DEFINE  REPOSITORY FOR USER SINGUP */
@@ -127,6 +127,24 @@ export default class UserRepository {
       console.log(error);
     }
   }
+  /** 6.DEFINE  REPOSITORY FOR LOGOUT*/
+  async logout(id){
+    try {
+      const user= await userModel.findByIdAndUpdate(id, {
+        $set:{
+          refreshToken:"" ,
+          OTP:""
+        }},
+        {new :true}
+        );
+      if(user){
+        return user
+      }else{
+        return ''
+      }
 
-
+    } catch (error) {
+      console.log(error);
+    }
+  }
 }

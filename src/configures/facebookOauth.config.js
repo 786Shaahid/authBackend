@@ -11,8 +11,9 @@ export const facebookAuth=()=>{
     },(accessToken,refreshToken,profile,done)=>{
         console.log(profile);
           return done(null,profile)
-    }   
-    
+    }
+       
+       
     ));
 
     passport.serializeUser((user, cb) => {

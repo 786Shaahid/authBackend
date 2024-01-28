@@ -1,5 +1,6 @@
-import dotenv from 'dotenv';
-dotenv.config();
+// import dotenv from 'dotenv';
+// dotenv.config();
+import env from "./src/utility/environment.utility.js";
 import express from "express";
 import userRouter from "./src/features/users/user.route.js";
 import { connectDB } from "./src/configures/mongose.config.js";
@@ -19,7 +20,7 @@ googleAuth();
 facebookAuth();
 // create server
 const app=express();
-const port =8080;
+const port =process.env.PORT || 8080;
 
 // Create an HTTP server and integrate with Socket.io
 const  server= http.createServer(app);
@@ -34,7 +35,7 @@ export  const io= new Server(server,{
   allowEIO3: true
 });
 
-chatConnection(io);
+chatConnection(io, server);
 
 app.use(express.json({extended:true}));
 app.use(express.urlencoded({ extended: true }));
@@ -46,12 +47,12 @@ app.use(express.urlencoded({ extended: true }));
         resave:false,
         saveUninitialized:true,
         cookie:{
-            maxAge:60*60,
+          maxAge:60*60,
         }
-    }));
-    // setup the passport
-    app.use(passport.initialize());
-    app.use(passport.session());
+      }));
+      // setup the passport
+      app.use(passport.initialize());
+      app.use(passport.session());
     
     // import user routers
     app.use("/api/users",userRouter);
@@ -78,7 +79,7 @@ app.use(express.urlencoded({ extended: true }));
         // connecting mongooose
         connectDB()
         .then((connectedDb) => {
-          server.listen(port, () => {
+          app.listen(port, () => {
             console.log(`app listening on port ${port}`);
             console.log(`connected to DB :: ${connectedDb.name}`);
           });

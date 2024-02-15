@@ -29,13 +29,18 @@ userRouter.get("/logout", authJWT, (req, res) => {
 // google authentication
 userRouter.get(
   "/auth/google",
-  passport.authenticate("google", { scope: ["email", "profile"] })
+  passport.authenticate("google", { scope: ["email", "profile"] }),
+  (req,res)=>{
+    console.log("google authentication",req," ",res);
+  }
 );
 userRouter.get(
   "/auth/google/callback",
   passport.authenticate("google", { session: false }),
   (req, res) => {
-    res.send("google authentication complete");
+    console.log(" request -",req);
+    console.log(" response -",res);
+    // res.send("google authentication complete");
   }
 );
 

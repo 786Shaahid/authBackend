@@ -7,10 +7,10 @@ export const chatConnection=(io,server)=>{
         socket.join(roomId);
       });
 
-      socket.on("sendMessage",({roomId,message})=>{
-        console.log("room Id",roomId);
-        console.log("message ",message);
-        io.to(roomId).emit("chat", message )
+      socket.on("sendMessage",({roomId,userId,message})=>{
+        // console.log("room Id",roomId);
+        // console.log("message ",userId,message);
+        io.to(roomId).emit("chat",{ message,userId} )
       });
 
       socket.on('disconnect',()=>{

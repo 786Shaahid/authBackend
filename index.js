@@ -39,6 +39,7 @@ chatConnection(io, server);
 
 app.use(express.json({extended:true}));
 app.use(express.urlencoded({ extended: true }));
+app.set('trust proxy', 1);
 
 
 
@@ -50,7 +51,7 @@ app.use(express.urlencoded({ extended: true }));
           maxAge:60*60,
         }
       }));
-      // setup the passport
+      // setup the passport middleware
       app.use(passport.initialize());
       app.use(passport.session());
     

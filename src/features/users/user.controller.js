@@ -89,11 +89,13 @@ export default class UserController {
   /** 4.DEFINE  CONTROLLER FOR SENDING MAIL  */
   async sendMailOpt(req, res) {
     try {
+      // console.log("sendMail-91",req.body);
       const randamPassword = this.getRandomPassword();
       const addOtpToDb = await this.userRepository.addOTP(
         req.body.email,
         randamPassword
       );
+      // console.log('findUser-98',addOtpToDb)
       // send mail to registerd email id
       if (addOtpToDb) {
         const sendMail = await sendMailForOTP(addOtpToDb.email, randamPassword);
@@ -101,10 +103,9 @@ export default class UserController {
           new ApiResponse(true, "Email is sent to your register email ID", "")
         );
       } else {
-
         return res
-          .status(err?.status || 500)
-          .json(new ErrorHandle(false, "Internal Server Error", err?.message ?? err.err ?? "something went wrong"));
+          .status(400)
+          .json(new ErrorHandle(false,"","Please Enter Valid Email !"));
 
       }
     } catch (err) {
@@ -126,27 +127,28 @@ export default class UserController {
     try {
       const otp = req.body.otp;
       const user = await this.userRepository.findUserWithOtp(otp);
-      // console.log("user", user);
+      // console.log("user-loginwithotp", user);
       if (!user) {
-        return res.status(404).json("Invalid OTP");
+        return res.status(404).json(new ErrorHandle(false,'','Invalid OTP ! '));
       } else {
-        const accessToken = await this.generateAccessToken(user._id);
-        const refreshToken = await this.generateRefreshToken(user._id);
-        //  set the refreshToken to user
-        user.refreshToken = refreshToken;
-        await user.save();
-        //  data to be   send to client side about user
-        const userData = {
-          _id: user._id,
-          name: user.name,
-        };
-        return res
-          .status(200)
-          .json(new ApiResponse(true, "Login successfully !", {
-            userData,
-            accessToken,
-            refreshToken,
-          }));
+         // 2. create token, if user exist
+         const accessToken = await this.generateAccessToken(user._id);
+         const refreshToken = await this.generateRefreshToken(user._id);
+         // 3. set the refreshToken to user
+         user.refreshToken = refreshToken;
+         await user.save();
+         // 4. data to be   send to client side about user
+         const userData = {
+           _id: user._id,
+           name: user.name,
+         };
+         return res.status(200).json(
+           new ApiResponse(true, "Login successfully !", {
+             userData,
+             accessToken,
+             refreshToken,
+           })
+         );
       }
     } catch (err) {
       console.log(err);
@@ -209,17 +211,5 @@ export default class UserController {
     );
     return token;
   }
-
-  // async addFriend(req,res){
-  // const {userId,friendId}=  req.body;
-  //       try{
-  //         const added= await this.userRepository.addFriend(userId,friendId);
-  //         if(!added){
-  //           throw new Error("Friend not found")
-  //         }
-  //         return res.status(201).send(added);
-  //       }catch(err){
-  //         return res.status(400).send(err.message);
-  //       }
-  // }
+ 
 }

@@ -20,10 +20,5 @@ friendRouter.get('/getAllFriendRequest',(req,res)=>{
 friendRouter.post('/friendlist',(req,res)=>{
     friendController.friendList(req,res);
   });
-friendRouter.post('/sendMessage',(req,res)=>{
-    friendController.sendMessageToServer(req,res);
-  });
-friendRouter.post('/isFriend',(req,res)=>{
-    friendController.sendRequest(req,res);
-  });
+
   export default friendRouter;

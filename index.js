@@ -1,5 +1,3 @@
-// import dotenv from 'dotenv';
-// dotenv.config();
 import env from "./src/utility/environment.utility.js";
 import express from "express";
 import userRouter from "./src/features/users/user.route.js";
@@ -10,8 +8,8 @@ import passport from 'passport';
 import cors from 'cors';
 import { Server } from 'socket.io';
 import http from 'http'
-
-// authentication configs
+import helmet from "helmet";
+/**  AUTHENTICATION CONFIGS */
 import { googleAuth } from './src/configures/googleOauth.config.js';
 import {facebookAuth} from "./src/configures/facebookOauth.config.js";
 import friendRouter from './src/features/friends/friends.route.js';
@@ -22,7 +20,7 @@ facebookAuth();
 const app=express();
 const port =process.env.PORT || 8080;
 
-// Create an HTTP server and integrate with Socket.io
+/**   CREATE AN HTTP SERVER AND INTEGRATE WITH SOCKET.IO*/ 
 const  server= http.createServer(app);
 export  const io= new Server(server,{
   cors:{
@@ -31,53 +29,46 @@ export  const io= new Server(server,{
      transports: ['websocket', 'polling'],
      credentials: true
   },
-  // pingTimeout: 60000,
   allowEIO3: true
 });
 
 chatConnection(io, server);
 
+  /** CONFIGURATION  */
 app.use(express.json({extended:true}));
 app.use(express.urlencoded({ extended: true }));
-app.set('trust proxy', 1);
+app.use(helmet());
+app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
+
+
+// app.set('trust proxy', 1);
+app.use(cors());
+app.use(session({
+    secret:"SECRETE",
+    resave:false,
+    saveUninitialized:true,
+    cookie:{
+      maxAge:60*60,
+    }
+  }));
 
 
 
-    app.use(session({
-        secret:"SECRETE",
-        resave:false,
-        saveUninitialized:true,
-        cookie:{
-          maxAge:60*60,
-        }
-      }));
-      // setup the passport middleware
+      /**  SETUP THE PASSPORT MIDDLEWARE*/ 
       app.use(passport.initialize());
       app.use(passport.session());
-    
-    // import user routers
+      
+    /**ROUTERS */
     app.use("/api/users",userRouter);
     app.use('/api/friends',authJWT,friendRouter);
     
-    // const corsConfig=
-    //     {
-        //         // origin:"https://incredible-twilight-3ebe40.netlify.app/",
-        //         origin:"http://localhost:3000",
-        //         allowedHeaders:"*",
-        //         credentials:true,
-        //         optionsSuccessStatus:200
-        //     }
-        
-        
-        // app.use(cors(corsConfig));
-        
-        //defalut respone and req
+        //defalut respone and req for testing
         app.get('/',(req,res)=>{
             return res.send(" Hii shahid ,how are you");
         });
 
 
-        // connecting mongooose
+        /** CONNECTION DB AND LISTENING*/ 
         connectDB()
         .then((connectedDb) => {
           app.listen(port, () => {

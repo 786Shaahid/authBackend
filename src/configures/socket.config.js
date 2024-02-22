@@ -1,4 +1,4 @@
-import env from "../utility/environment.utility.js";
+import env from "./environment.config.js";
 export const chatConnection=(io,server)=>{
   const port =process.env.SOCKET_PORT;
     io.on('connection', (socket) => {

@@ -1,4 +1,4 @@
-import env from "./src/utility/environment.utility.js";
+import env from "./src/configures/environment.config.js";
 import express from "express";
 import userRouter from "./src/features/users/user.route.js";
 import { connectDB } from "./src/configures/mongose.config.js";

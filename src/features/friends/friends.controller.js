@@ -78,7 +78,7 @@ export class FriendController{
    async getAllFriendRequest(req,res){
      try {
           const userId=req.userId;
-          // console.log(userId);
+          // console.log('id hai bhai',userId);
           const friendRequest= await this.friendRepository.getAllFriendRequest(userId);
           // console.log(friendRequest );
          if (!friendRequest){

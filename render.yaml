@@ -1,0 +1,14 @@
+services:
+  - name: express-server
+    env:
+      - key: PORT
+        fromFile: true
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+
+  - name: socket-server
+    env:
+      - key: SOCKET_PORT
+        fromFile: true
+    buildCommand: npm install && npm run build
+    startCommand: npm run start-socket

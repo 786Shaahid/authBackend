@@ -113,15 +113,17 @@ export default class UserRepository {
             path: '$friendship',
             preserveNullAndEmptyArrays: true,
           }
-        }, {
+        }, 
+        {
           $project: {
             "name": 1,
             "email": 1,
-            "friendship._id": 1
+            "friendship._id": 1,
+             "friendship.status":1 
           }
         }
       ]);
-      // console.log("users",users);
+      console.log("users",users);
       return users;
     } catch (error) {
       console.log(error);

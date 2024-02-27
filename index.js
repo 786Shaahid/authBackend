@@ -35,6 +35,7 @@ export  const io= new Server(server,{
 chatConnection(io, server);
 
   /** CONFIGURATION  */
+  app.use(cors({origin: true, credentials: true}));
 app.use(express.json({extended:true}));
 app.use(express.urlencoded({ extended: true }));
 app.use(helmet());
@@ -42,7 +43,6 @@ app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 
 
 // app.set('trust proxy', 1);
-app.use(cors());
 app.use(session({
     secret:"SECRETE",
     resave:false,

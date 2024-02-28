@@ -35,15 +35,16 @@ export  const io= new Server(server,{
 chatConnection(io, server);
 
   /** CONFIGURATION  */
-  app.use(cors({origin: true, credentials: true}));
-app.use(express.json({extended:true}));
-app.use(express.urlencoded({ extended: true }));
-app.use(helmet());
-app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
-
-
-// app.set('trust proxy', 1);
-app.use(session({
+  app.use(express.json({extended:true}));
+  app.use(express.urlencoded({ extended: true }));
+  app.use(helmet());
+  app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
+  
+  
+  // app.use(cors({origin: true, credentials: true}));
+  app.use(cors());
+  // app.set('trust proxy', 1);
+  app.use(session({
     secret:"SECRETE",
     resave:false,
     saveUninitialized:true,
@@ -51,9 +52,9 @@ app.use(session({
       maxAge:60*60,
     }
   }));
-
-
-
+  
+  
+  
       /**  SETUP THE PASSPORT MIDDLEWARE*/ 
       app.use(passport.initialize());
       app.use(passport.session());

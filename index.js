@@ -24,12 +24,12 @@ const port =process.env.PORT || 8080;
 const  server= http.createServer(app);
 export  const io= new Server(server,{
   cors:{
-     origin:true,
+    origin: process.env.NODE_ENV === "production" ? ['https://connectify-website.netlify.app/']: ["http://localhost:3000"],
      methods: ["GET", "POST"],
      transports: ['websocket', 'polling'],
-     credentials: true
+    //  credentials: true
   },
-  allowEIO3: true
+  // allowEIO3: true
 });
 
 chatConnection(io, server);

@@ -26,7 +26,7 @@ export  const io= new Server(server,{
   cors:{
     origin: process.env.NODE_ENV === "production" ? ['https://connectify-website.netlify.app/']: ["http://localhost:3000"],
      methods: ["GET", "POST"],
-     transports: ['websocket', 'polling'],
+     transports: ['websocket'],
     //  credentials: true
   },
   // allowEIO3: true

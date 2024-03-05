@@ -1,5 +1,5 @@
 import env from "./environment.config.js";
-export const chatConnection=(io,server)=>{
+export const chatConnection=(io)=>{
   const port =process.env.SOCKET_PORT;
     io.on('connection', (socket) => {
       socket.on('joinRoom', (roomId) => {
@@ -16,9 +16,9 @@ export const chatConnection=(io,server)=>{
       });
 
       // Socket_server listening 
-     server.listen(port,()=>{
-       console.log(`Socket server is listening on port: ${port}`);
-     })
+    //  server.listen(port,()=>{
+    //    console.log(`Socket server is listening on port: ${port}`);
+    //  })
       
 }
 

@@ -26,13 +26,13 @@ export  const io= new Server(server,{
   cors:{
     origin: process.env.NODE_ENV === "production" ? ['https://connectify-website.netlify.app/']: ["http://localhost:3000"],
      methods: ["GET", "POST"],
-     transports: ['websocket'],
+     transports: ['websocket', 'polling'],
     //  credentials: true
   },
   // allowEIO3: true
 });
 
-chatConnection(io, server);
+chatConnection(io);
 
   /** CONFIGURATION  */
   app.use(express.json({extended:true}));
@@ -72,7 +72,7 @@ chatConnection(io, server);
         /** CONNECTION DB AND LISTENING*/ 
         connectDB()
         .then((connectedDb) => {
-          app.listen(port, () => {
+          server.listen(port, () => {
             console.log(`app listening on port ${port}`);
             console.log(`connected to DB :: ${connectedDb.name}`);
           });

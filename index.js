@@ -42,14 +42,11 @@ chatConnection(io);
   app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
   
   
-  // app.use(cors({origin: true, credentials: true}));
-  // app.use(cors({origin:"*",credentials:true}));
   app.use(cors({ origin: true, credentials: true }));
 
   // app.set('trust proxy', 1); for proxy
 
   
-  console.log(process.env.SESSION_SECRET_KEY);
   app.use(session({
     secret:process.env.SESSION_SECRET_KEY,
     resave:false,

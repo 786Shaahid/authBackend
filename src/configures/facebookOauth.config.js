@@ -7,7 +7,7 @@ import UserController from "../features/users/user.controller.js";
 const userController= new UserController();
 
 export const facebookAuth=()=>{
-    console.log("facebookid-",process.env.FACEBOOK_CALLBACKURL);
+    // console.log("facebookid-",process.env.FACEBOOK_CALLBACKURL);
     passport.use(new facebookStrategy({
         clientID:process.env.FACEBOOK_APPID,
         clientSecret:process.env.FACEBOOK_APP_SECRET,
@@ -16,7 +16,7 @@ export const facebookAuth=()=>{
     async (accessToken,refreshToken,profile,done)=>{
      try {
       //  console.log("hii answer fkjhsdkfhasd");
-         console.log('profile facebook',profile);
+        //  console.log('profile facebook',profile);
           const email= profile.emails[0];
           const name=profile.displayName;
           const user= await userModel.findOne({email});

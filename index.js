@@ -49,6 +49,7 @@ chatConnection(io);
   // app.set('trust proxy', 1); for proxy
 
   
+  console.log(process.env.SESSION_SECRET_KEY);
   app.use(session({
     secret:process.env.SESSION_SECRET_KEY,
     resave:false,

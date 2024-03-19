@@ -15,7 +15,7 @@ export default class UserController {
     // console.log(req.body);
     try {
       const user = await this.userRepository.userSingUp(req.body);
-      console.log(user);
+      // console.log(user);
       return res
         .status(201)
         .json(new ApiResponse(true, "Registered Successfully !", ""));

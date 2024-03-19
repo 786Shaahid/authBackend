@@ -7,16 +7,6 @@ import BASE_URL_FRONTEND from "../../utility/fronendBaseUrl.utility.js";
 const userRouter = express.Router();
 const userController = new UserController();
 
-// let frontend_URL;
-// if(process.env.NODE_ENV==='production'){
-//   frontend_URL='https://connectify-website.netlify.app';
-// }else{
-//   frontend_URL="http://localhost:3000";
-// }
-
-// console.log(frontendLink);
-
-
 userRouter.post("/signup",validateUser, (req, res) => {
   userController.signUp(req, res);
 });

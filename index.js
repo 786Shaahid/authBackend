@@ -28,9 +28,7 @@ export  const io= new Server(server,{
     origin: BASE_URL_FRONTEND,
      methods: ["GET", "POST"],
      transports: ['websocket', 'polling'],
-    //  credentials: true
   },
-  // allowEIO3: true
 });
 
 chatConnection(io);

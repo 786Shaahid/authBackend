@@ -9,6 +9,7 @@ import cors from 'cors';
 import { Server } from 'socket.io';
 import http from 'http'
 import helmet from "helmet";
+import { MemoryStore } from "express-session";
 /**  AUTHENTICATION CONFIGS */
 import { googleAuth } from './src/configures/googleOauth.config.js';
 import {facebookAuth} from "./src/configures/facebookOauth.config.js";
@@ -46,6 +47,9 @@ chatConnection(io);
 
   
   app.use(session({
+    store: new MemoryStore({
+      checkPeriod: 86400000
+    }),
     secret:process.env.SESSION_SECRET_KEY,
     resave:false,
     saveUninitialized:true,

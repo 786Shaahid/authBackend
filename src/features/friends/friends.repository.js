@@ -72,7 +72,7 @@ export class FriendRepository {
           }
         }
       ])
-      console.log("friends",friends);
+      // console.log("friends",friends);
       return friends;
     } catch (error) {
       console.log("error", error);

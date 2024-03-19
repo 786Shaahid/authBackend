@@ -1,6 +1,7 @@
 import { sendMailForOTP } from "../../configures/nodemailer.config.js";
 import { ApiResponse } from "../../utility/apiResponse.utility.js";
 import { ErrorHandle } from "../../utility/error.utility.js";
+import BASE_URL_FRONTEND from "../../utility/fronendBaseUrl.utility.js";
 import UserRepository from "./user.repository.js";
 import jsonwebtoken from "jsonwebtoken";
 
@@ -53,7 +54,6 @@ export default class UserController {
           new ApiResponse(true, "Login successfully !", {
             userData,
             accessToken,
-            refreshToken,
           })
         );
       }
@@ -69,18 +69,29 @@ export default class UserController {
   async logout(req, res) {
         try {
       const userId= req.userId;
+      // console.log('sessionId',req.sessionID);
+      // req.logout((err)=>{
+      //   if(err) {throw err};
+      //      return  res.redirect(`${BASE_URL_FRONTEND}/signin`) 
+      // });
       const logoutUser= await this.userRepository.logout(userId);
-      if(logoutUser){
-        return res.status(200).json(
+      if(logoutUser ){
+        req.logout((err)=>{
+            if(err) {throw err};
+          })
+          // res.redirect(`${BASE_URL_FRONTEND}/signin`) 
+           res.clearCookie('connect.sid')
+                  return res.status(200).json(
           new ApiResponse(true, "User Logout successfully ! ", '')
-        );
-      } else{
+          );
+        } else {
         return res
         .status(404)
         .json(new ErrorHandle(false, "Something Went Wronge !", {}));
       }
 
-        } catch (error) {
+        } catch (err) {
+          console.log(err);
           return res
         .status(err?.status || 500)
         .json(new ErrorHandle(false, "Internal Server Error", err?.message ?? err.err ?? "something went wrong"));
@@ -213,4 +224,36 @@ export default class UserController {
     return token;
   }
  
+  /** 10 . DEFINE CONTROLLER FOR SOCIAT LOGIN SUCCESSFULLY */
+  async socialLogin(req,res){
+    // console.log('request hai bhai',req.id);
+     try {
+        // Take user id from session
+        const id=req.user;
+        console.log('id socaial login ',id);
+        const user= await this.userRepository.userData(id);
+        // console.log(user);
+        if(!user){
+          return res.status(404).json(new ErrorHandle(false,"Not Found",''));
+        }else{
+          const accessToken = await this.generateAccessToken(user._id);
+          const userData = {
+            _id: user._id,
+            name: user.name,
+          };
+          return res.status(200).json(
+            new ApiResponse(true, "Login successfully !", {
+              userData,
+              accessToken
+            })
+          );
+        }
+     } catch (error) {
+      console.log(error);
+      return res
+        .status(err?.status || 500)
+        .json(new ErrorHandle(false, "Internal Server Error", err?.message ?? err.err ?? "something went wrong"));
+ 
+     }
+  }
 }

@@ -1,11 +1,20 @@
 import express from "express";
 import UserController from "./user.controller.js";
 import { authJWT } from "../../middlewares/authJWT.middleware.js";
-import { googleAuth } from "../../configures/googleOauth.config.js";
 import passport from "passport";
 import { validateUser } from "../../middlewares/userValidate.middlewares.js";
+import BASE_URL_FRONTEND from "../../utility/fronendBaseUrl.utility.js";
 const userRouter = express.Router();
 const userController = new UserController();
+
+// let frontend_URL;
+// if(process.env.NODE_ENV==='production'){
+//   frontend_URL='https://connectify-website.netlify.app';
+// }else{
+//   frontend_URL="http://localhost:3000";
+// }
+
+// console.log(frontendLink);
 
 
 userRouter.post("/signup",validateUser, (req, res) => {
@@ -21,7 +30,6 @@ userRouter.post("/singinotp", (req, res) => {
   userController.loginWithOtp(req, res);
 });
 
-
 userRouter.get("/logout", authJWT, (req, res) => {
   userController.logout(req, res);
 });
@@ -29,46 +37,37 @@ userRouter.get("/logout", authJWT, (req, res) => {
 // google authentication
 userRouter.get(
   "/auth/google",
-  passport.authenticate("google", { scope: ["email", "profile"] }),
-  (req,res)=>{
-    console.log("google authentication",req," ",res);
-  }
-);
+  passport.authenticate("google", { scope: ['email', 'profile'] }
+ ));
 userRouter.get(
   "/auth/google/callback",
-  passport.authenticate("google", { session: false }),
-  (req, res) => {
-    console.log(" request -",req);
-    console.log(" response -",res);
-    // res.send("google authentication complete");
-  }
-);
+  passport.authenticate("google",
+  {  
+    successRedirect: `${BASE_URL_FRONTEND}`,
+    failureRedirect: `${BASE_URL_FRONTEND}/signin` 
+  
+}
+  ),
+  );
 
 // facebook authentication 
-userRouter.get('/auth/facebook',passport.authenticate("facebook",{
+userRouter.get('/auth/facebook',passport.authenticate("facebook",
+{
   scope: ['public_profile', 'email']
 }
+));
+ userRouter.get("/auth/facebook/callback",passport.authenticate("facebook",
+ {
+  successRedirect: `${BASE_URL_FRONTEND}`,
+  failureRedirect: `${BASE_URL_FRONTEND}/signin` 
+}
+));  
 
-
-))
- userRouter.get("/auth/facebook/callback",passport.authenticate("facebook",{session:true}),(req,res)=>{
-  // console.log("req",req);
-  res.json({message:"login successfully bro"})
-});  
-// userRouter.get("/getdata",(req,res)=>{
-//   const data={
-//     "name":"shahid",
-//     "passport":"raza",
-//     "phone":"9090090"
-//   }
-//   return res.status(200).send(data);
-// });
-
-userRouter.post("/getall",(req,res)=>{
+ userRouter.post("/getall",(req,res)=>{
   userController.getAllUser(req,res);
 });
-// userRouter.post('/addfriend',(req,res)=>{
-//   userController.addFriend(req,res);
-// })
+userRouter.get('/login/success',(req,res)=>{
+  userController.socialLogin(req,res);
+});
  
 export default userRouter;

@@ -123,7 +123,7 @@ export default class UserRepository {
           }
         }
       ]);
-      console.log("users",users);
+      // console.log("users",users);
       return users;
     } catch (error) {
       console.log(error);
@@ -140,13 +140,27 @@ export default class UserRepository {
         {new :true}
         );
       if(user){
-        return user
+        return user;
       }else{
-        return ''
+        return '';
       }
-
     } catch (error) {
       console.log(error);
     }
   }
+
+  async userData(id){
+    try {
+      const result= await userModel.findById({_id:id})
+      if(result){
+           return result ;
+      }else{
+        return '';
+      }
+    } catch (error) {
+      
+    }
+  }
+
+
 }

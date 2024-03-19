@@ -14,6 +14,7 @@ import { googleAuth } from './src/configures/googleOauth.config.js';
 import {facebookAuth} from "./src/configures/facebookOauth.config.js";
 import friendRouter from './src/features/friends/friends.route.js';
 import { chatConnection } from './src/configures/socket.config.js';
+import BASE_URL_FRONTEND from "./src/utility/fronendBaseUrl.utility.js";
 googleAuth();
 facebookAuth();
 // create server
@@ -24,7 +25,7 @@ const port =process.env.PORT || 8080;
 const  server= http.createServer(app);
 export  const io= new Server(server,{
   cors:{
-    origin: process.env.NODE_ENV === "production" ? ['https://connectify-website.netlify.app/']: ["http://localhost:3000"],
+    origin: BASE_URL_FRONTEND,
      methods: ["GET", "POST"],
      transports: ['websocket', 'polling'],
     //  credentials: true
@@ -42,22 +43,24 @@ chatConnection(io);
   
   
   // app.use(cors({origin: true, credentials: true}));
-  app.use(cors());
-  // app.set('trust proxy', 1);
+  // app.use(cors({origin:"*",credentials:true}));
+  app.use(cors({ origin: true, credentials: true }));
+
+  // app.set('trust proxy', 1); for proxy
+
+  
   app.use(session({
-    secret:"SECRETE",
+    secret:process.env.SESSION_SECRET_KEY,
     resave:false,
     saveUninitialized:true,
-    cookie:{
-      maxAge:60*60,
-    }
   }));
   
+  /**  SETUP THE PASSPORT MIDDLEWARE*/ 
+  app.use(passport.initialize());
+  app.use(passport.session());
   
   
-      /**  SETUP THE PASSPORT MIDDLEWARE*/ 
-      app.use(passport.initialize());
-      app.use(passport.session());
+     
       
     /**ROUTERS */
     app.use("/api/users",userRouter);

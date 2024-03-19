@@ -43,16 +43,16 @@ export const facebookAuth=()=>{
     }
     ));
 
-    // passport.serializeUser((user, cb) => {
-    //   console.log('serialize-facebook',user);
-    //     process.nextTick(() => {
-    //       cb(null, user);
-    //     });
-    //   });
-    //   passport.deserializeUser((user, cb) => {
-    //     process.nextTick(() => {
-    //       return cb(null, user);
-    //     });
-    //   });
+    passport.serializeUser((user, cb) => {
+      console.log('serialize-facebook',user);
+        process.nextTick(() => {
+          cb(null, user);
+        });
+      });
+      passport.deserializeUser((user, cb) => {
+        process.nextTick(() => {
+          return cb(null, user);
+        });
+      });
 }
 

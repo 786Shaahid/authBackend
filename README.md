@@ -12,22 +12,24 @@ hosted link https://authbackend-74z0.onrender.com
 ## API Reference
 
 #### URL = https://authbackend-74z0.onrender.com
+#### URL= http://localhost:8080 (for Local )
+
 #### Create User
 
 ```http
-  POST /api/v1/users/create
+  POST /api/users/signup
 ```
 
 | Body (application/json) | Type     | Description   |
 | :---------------------- | :------- | :------------ |
 | `name`                  | `string` | **Required**. |
-| `email`                 | `string` | **Required**. |
-| `password`              | `string` | **Required**. |
+| `email`                 | `string` | **Unique**. |
+| `password`              | `string` | **Password**. |
 
 #### Login
 
 ```http
-  POST /api/v1/auth/login
+  POST/api/users/signin
 ```
 
 | Parameter  | Type     | Description   |
@@ -35,34 +37,51 @@ hosted link https://authbackend-74z0.onrender.com
 | `email`    | `string` | **Required**. |
 | `password` | `string` | **Required**. |
 
-#### create an asset
-
+#### Login with OTP using email
+## 1. Send OTP to registered email
 ```http
-  POST /api/v1/asset/create/:userId
+  POST /api/users/sendmail
 ```
 
-| Body (multipart/form-data) | params   | Type       | Description   |
-| :------------------------- | :------- | :--------- | :------------ |
-| `-`                        | `userId` | `ObjectId` | **Required**. |
-| `name`                     | `-`      | `string`   | **Required**. |
-| `category`                 | `-`      | `string`   | **Required**. |
-| `tags`                     | `-`      | `string`   | **Required**. |
-| `folder`                   | `-`      | `file`     | **Required**. |
+|  params                    | Type       | Description   |
+| :------------------------- | :-------   | :-----------  | 
+| `email`                    | `string`   | **Required**. |
 
-#### Get an asset by asset Id
+## 2. Match OTP For login
+```http
+  POST /api/users/singinotp
+```
+
+|  params                    | Type       | Description   |
+| :------------------------- | :-------   | :-----------  | 
+| `email`                    | `string`   | **Required**. |
+
+#### Suggestions to make friends
 
 ```http
-  GET /api/v1/asset/:assetId
+  POST /api/users/getall
 ```
 
 | Parameter | Type       | Description   |
 | :-------- | :--------- | :------------ |
-| `assetId` | `ObjectId` | **Required**. |
+| `userId` | `ObjectId` | **Required**. |
 
-#### Get Assets By User Id
+
+#### Login with Google
 
 ```http
-  GET /api/v1/asset/user/:userId
+  GET /api/users/auth/google/callback
+```
+#### Login with Facebook
+
+```http
+  GET /api/users/auth/facebook/callback
+```
+
+#### logout
+
+```http
+  GET /api/users/logout
 ```
 
 | Parameter | Type       | Description   |
@@ -72,15 +91,12 @@ hosted link https://authbackend-74z0.onrender.com
 #### Update an asset by asset Id
 
 ```http
-  PUT /api/v1/asset/update/:assetId
+  POST /api/friends/addfriend
 ```
 
 | Body (application/json) | params    | Type       | Description   |
 | :---------------------- | :-------- | :--------- | :------------ |
-| `-`                     | `assetId` | `ObjectId` | **Required**. |
-| `name`                  | `-`       | `string`   | **Required**. |
-| `category`              | `-`       | `string`   | **Required**. |
-| `tags`                  | `-`       | `array`    | **Required**. |
+| `userID`                | `` | `ObjectId` | **Required**. |
 
 #### Delete an asset by asset Id
 
@@ -92,20 +108,25 @@ hosted link https://authbackend-74z0.onrender.com
 | :-------- | :--------- | :------------ |
 | `assetId` | `ObjectId` | **Required**. |
 
-## UI Demo
 
-https://asset-management-0au6.onrender.com/dashboard
 
 ## Environment Variables
 
 To run this project locally, you will need to add the following environment variables to your .env file created in root directory of your project
-
-- JWT_SECRET
-- MONGO_DEV_URL
-- AWS_ACCESS_ID
-- AWS_SECRET_ACCESS_KEY
-- AWS_S3_REGION
-- AWS_S3_BUCKET_NAME
+- DB_URL
+- ACCESS_SECRETE_TOKEN_KEY
+- REFRESH_SECRETE_TOKEN_KEY
+- GMAIL_ACCOUNT
+- GMAIL_PASSWORD
+- CLIENT_ID
+- CLIENT_SECRET
+- CALLBACK_URL
+- FACEBOOK_APPID
+- FACEBOOK_APP_SECRET
+- FACEBOOK_CALLBACKURL
+- SESSION_SECRET_KEY
+- SOCKET_PORT
+- PORT
 
 #### Note: Also, you will need to update proxy in vite.config() by localhost:${port_number}
 

@@ -2,10 +2,11 @@
 
 ### Description
 
-- Sign Up for a user
-- Sign In for a user
-- CRUD operations on an Asset
-- Dashboard to see uploaded pictures
+- Sign Up for a user.
+- Sign In for a user through user credential or OTP or google and facebook.
+- User can send friend request and accept the request.
+- Friend can chat with each other in real time.
+
 
 ## API Reference
 

@@ -1,6 +1,4 @@
-# authBackend
-hosted link https://authbackend-74z0.onrender.com
-# 
+# ConnectifyServer
 
 ### Description
 
@@ -38,7 +36,7 @@ hosted link https://authbackend-74z0.onrender.com
 | `password` | `string` | **Required**. |
 
 #### Login with OTP using email
-## 1. Send OTP to registered email
+##### 1. Send OTP to registered email
 ```http
   POST /api/users/sendmail
 ```
@@ -47,7 +45,7 @@ hosted link https://authbackend-74z0.onrender.com
 | :------------------------- | :-------   | :-----------  | 
 | `email`                    | `string`   | **Required**. |
 
-## 2. Match OTP For login
+##### 2. Match OTP For login
 ```http
   POST /api/users/singinotp
 ```
@@ -88,25 +86,56 @@ hosted link https://authbackend-74z0.onrender.com
 | :-------- | :--------- | :------------ |
 | `userId`  | `ObjectId` | **Required**. |
 
-#### Update an asset by asset Id
+#### Make Friends
 
 ```http
   POST /api/friends/addfriend
 ```
 
-| Body (application/json) | params    | Type       | Description   |
-| :---------------------- | :-------- | :--------- | :------------ |
-| `userID`                | `` | `ObjectId` | **Required**. |
+| Body (application/json) | Type       | Description   |
+| :---------------------- | :--------- | :------------ |
+| `userId`                | `ObjectId` | **Required**. |
+| `friendId`              | `ObjectId` | **Required**. |
 
-#### Delete an asset by asset Id
+#### Remove Friends
 
 ```http
-  DELETE /api/v1/asset/update/:assetId
+  POST /api/friends/removefriend
 ```
 
-| Parameter | Type       | Description   |
-| :-------- | :--------- | :------------ |
-| `assetId` | `ObjectId` | **Required**. |
+| Body       | Type       | Description   |
+| :--------  | :--------- | :------------ |
+| `friendId` | `ObjectId` | **Required**. |
+
+#### Accept Friend Request
+
+```http
+  POST /api/friends/acceptfriend
+```
+
+| Body       | Type       | Description   |
+| :--------  | :--------- | :------------ |
+| `friendId` | `ObjectId` | **Required**. |
+
+#### Get All Friend Request For User 
+
+```http
+  GET /api/friends/getAllFriendRequest
+```
+
+| Parameter      | Type       | Description   |
+| :--------  | :--------- | :------------ |
+| `userId` | `ObjectId` | **Required**. |
+
+#### Get All Friend Of User 
+
+```http
+  GET /api/friends/friendlist
+```
+
+| Parameter      | Type       | Description   |
+| :--------  | :--------- | :------------ |
+| `userId` | `ObjectId` | **Required**. |
 
 
 
@@ -128,50 +157,7 @@ To run this project locally, you will need to add the following environment vari
 - SOCKET_PORT
 - PORT
 
-#### Note: Also, you will need to update proxy in vite.config() by localhost:${port_number}
+#### Note: Also, you will need to update proxy in package.json of react app by localhost:${port_number}
 
-## Screenshots
 
-### Mongo DB record for an asset
 
-![App Screenshot](./screenshots/assetDbRecord.jpg)
-
-### Mongo DB record for an asset soft delete
-
-![App Screenshot](./screenshots/assetSoftDeleteDbRecord.jpg)
-
-### Asset Folder Name as the uploaded folder in AWS S3 Bucket
-
-![App Screenshot](./screenshots/assetBucketRecord.jpg)
-
-## cURL - Refer Api Reference as well
-
-### create a user
-
-```bash
-  curl --location 'https://asset-management-0au6.onrender.com/api/v1/user/create' \
---header 'Content-Type: application/x-www-form-urlencoded' \
---data-urlencode 'name=****' \
---data-urlencode 'email=******' \
---data-urlencode 'password=*****'
-```
-
-### login a user
-
-```bash
-  curl --location 'https://asset-management-0au6.onrender.com/api/v1/auth/login' \
---header 'Content-Type: application/x-www-form-urlencoded' \
---data-urlencode 'email=**********' \
---data-urlencode 'password=*******'
-```
-
-### create an asset
-
-```bash
- curl --location 'https://asset-management-0au6.onrender.com/api/v1/asset/create/647a68e7be01b54e1ab9dd10' \
---header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0N2E2OGU3YmUwMWI1NGUxYWI5ZGQxHCIsImlhdCI6MTY4NTkxNDc4N30.M1jrZBHBrA7uiqOFydbjZ7hHgMhSEZ0bfJA6Tv6i79Q' \
---form 'folder=@"/D:/Assinments - Company/Terra/Test.zip"' \
---form 'name="hisham"' \
---form 'tags="dasd"' \
---form 'category="asda"'
-```

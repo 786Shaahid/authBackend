@@ -1,22 +1,22 @@
-import dotenv from 'dotenv';
-dotenv.config();
+import environmentConfig from "./environment.config.js";
 import passport from "passport";
 import { userModel } from "../features/users/user.model.js";
 import {Strategy as GoogleStrategy} from "passport-google-oauth2";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+import env from '../../environment.js';
 import UserController from '../features/users/user.controller.js';
 const userController= new UserController();
 
 
 export const googleAuth = () => {
-  // console.log(process.env.CALLBACK_URL)
+  console.log(env)
   passport.use(
     new GoogleStrategy(
       {
         clientID: process.env.CLIENT_ID,
         clientSecret: process.env.CLIENT_SECRET,
-        callbackURL: process.env.CALLBACK_URL,
+        callbackURL: env.callback_url,
         scope: ["email", "profile"]
         // profileField:[]
             },

@@ -1,8 +1,9 @@
 import passport from "passport";
-// import environmentConfig from "./environment.config.js";
+import enviromentConfig from "./environment.config.js";
 import {Strategy as facebookStrategy } from  "passport-facebook";
 import { userModel } from "../features/users/user.model.js";
 import bcrypt from 'bcrypt';
+import env from "../../environment.js";
 import UserController from "../features/users/user.controller.js";
 const userController= new UserController();
 
@@ -11,7 +12,7 @@ export const facebookAuth=()=>{
     passport.use(new facebookStrategy({
         clientID:process.env.FACEBOOK_APPID,
         clientSecret:process.env.FACEBOOK_APP_SECRET,
-        callbackURL:process.env.FACEBOOK_CALLBACKURL
+        callbackURL:env.facebook_callback_url
     },
     async (accessToken,refreshToken,profile,done)=>{
      try {
